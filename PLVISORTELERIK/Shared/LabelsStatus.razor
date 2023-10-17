@@ -1,0 +1,20 @@
+﻿ <div style="border-radius:3px;font-size:12px;text-align:center; width:85px" class="bg-@color p-1 text-light">
+                            @txt
+                        </div>
+    
+
+@code {
+    [Parameter] public int tipo { get; set; }
+    [Parameter] public string txt { get; set; }
+    public string color;
+    protected override void OnParametersSet()
+    {
+        if (tipo == 0)
+            color = "danger";
+        if (tipo == 1)
+            color = "success";
+        if (tipo == 2)
+            color = "secondary";
+
+    }
+}

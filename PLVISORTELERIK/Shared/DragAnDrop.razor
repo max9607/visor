@@ -1,0 +1,88 @@
+﻿@using Microsoft.AspNetCore.Components.Forms;
+@inject IMensajeToastr message
+<div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height: inherit;" class="contentShared">
+    <div class="container-inputShared @dashed  " style="height:inherit;width:inherit;">
+        <InputFile @ref="@SharedInput" accept="@_AcceptFile" draggable="true" id="inputShared"  OnChange="getFile" />
+        <div class="title-inputshared @DisplayPreview ">
+            <img src="@imgSrc" style="width:inherit; height:inherit;" />
+        </div>
+        <div class="title-inputshared-default @Display ">
+            <p>
+                Arrastre y suelte la Imagen Aquí
+            </p>
+          
+         </div>
+
+    </div>
+    <div class="text-center">
+        <h6 class="@DisplayPreview mb-0 pb-0" style="font-size:14px">
+            Arrastre y suelte la Imagen arriba
+        </h6 >
+        <p style="font-size:14px" class="my-0">ó</p>
+        <button class="btn btn-primary btn-sm " onclick="$('#inputShared').trigger( 'click' )">agregar Foto Manualmente</button>
+        
+    </div>
+    
+</div>
+
+@code {
+    public string imgSrc = null;
+    private bool stateDisplay => imgSrc == null? true: false;
+    private string? Display => stateDisplay ? "d-flex" : "d-none";
+    private string? dashed => stateDisplay ? "dashed" : null;
+    private string? DisplayPreview => stateDisplay ? "d-none" : "d-flex";
+    const string format = "image/jpeg";
+
+    [Parameter] public int MaxSize { get; set; }
+    InputFile? SharedInput;
+    [Parameter]public Accept AcceptFile {get; set;}
+    private string _AcceptFile
+    {
+        get
+        {
+
+            switch (AcceptFile)
+            {
+                case Accept.imagen:
+                    return "image/*";
+                case Accept.audio:
+                    return "audio/*";
+                case Accept.video:
+                    return "video/*l";
+                case Accept.documento:
+                    return ".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf";
+                case Accept.all:
+                    return "";
+                default:
+                    return "";
+            }
+        }
+
+    }
+
+    private async Task getFile(InputFileChangeEventArgs e)
+    {
+        
+        var a = e.File.ContentType;
+        //var b = a.Split('/')[0];
+        var KB = MaxSize * 1000;
+        var B = KB * 1000;
+
+        if(e.File.Size <= B)
+        {
+            var stream = e.File.OpenReadStream(maxAllowedSize: e.File.Size);
+            var ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+            var buffer = ms.ToArray();
+            var imgb64 = Convert.ToBase64String(buffer);
+            imgSrc = $"data:{format};base64,{imgb64}";
+   
+            this.StateHasChanged();
+        }
+        else
+        {
+          await message.MostrarMensajeError("el archivo no debe superar los "+ MaxSize+" MB");
+        }
+
+    }
+}

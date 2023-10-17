@@ -1,0 +1,166 @@
+﻿@inherits LayoutComponentBase
+
+@inject IJSRuntime js
+@inject NavigationManager navigationManager
+@inject Auth.RenovadorToken renovadorToken;
+@inject Auth.ILoginService loginService;
+
+<PageTitle>PlantillaBZServerN7</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <div class="wrapper container-fluid theme-dark p-0 m-0">
+            <div id="content" class="@content" 
+                <main>
+                    <article class="content px-2" style="margin-top: 45px">
+                        <TelerikRootComponent>
+                            @Body
+                        </TelerikRootComponent>
+                    </article>
+                </main>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <NoAutorizado></NoAutorizado>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    public bool modoDark = true;
+    private string? classDark => modoDark ? "theme-dark" : null;
+    private string? themeBtn => modoDark ? "primary" : null;
+    private string? modolight => themeBtn != "primary" ? "primary" : null;
+    private string icon => modoDark ? "brightness-high" : "moon-fill";
+    private bool collapseNavMenu = false;
+
+
+
+    private bool? checkedV;
+    private string? sideBar => collapseNavMenu ? "active" : null;
+
+    private string? content => collapseNavMenu ? "active" : null;
+    private string? contenido => collapseNavMenu ? "full-width" : null;
+    private string? navBar => collapseNavMenu ? "full-width" : null;
+    private string? collapse => collapseNavMenu ? "in" : null;
+
+    [CascadingParameter]
+    public Task<AuthenticationState>? authenticationStateTask { get; set; }
+
+
+    public void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+        if (collapseNavMenu)
+            checkedV = true;
+        else
+            checkedV = false;
+
+    }
+    public void ToggleNavMenuContent()
+    {
+        if (collapseNavMenu)
+        {
+            checkedV = false;
+            collapseNavMenu = false;
+        }
+        this.StateHasChanged();
+    }
+
+    private void logout()
+    {
+        navigationManager.NavigateTo("Logout");
+    }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await js.InicializarStorageEvento(DotNetObjectReference.Create(this));
+        renovadorToken.Iniciar();
+        await js.InicializarTimerInactivo(DotNetObjectReference.Create(this));
+
+        var authState = await authenticationStateTask!;
+        var user = authState.User;
+        if (user.Identity!.IsAuthenticated)
+        {
+            var ruta = navigationManager.ObtenerUrlSinParametro("token");
+            navigationManager.NavigateTo(ruta);
+        }
+
+
+        //await asignarThema();
+    }
+
+    [JSInvokable]
+    public async Task VerificarLogueo()
+    {
+        var authState = await authenticationStateTask!;
+        var user = authState.User;
+        if (user.Identity!.IsAuthenticated)
+        {
+
+            var token = await js.GetFromLocalStorage("TOKENKEY");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                navigationManager.NavigateTo($"/reportelerik/login", true);
+            }
+        }
+    }
+
+    [JSInvokable]
+    public async Task Logout()
+    {
+        var authState = await authenticationStateTask!;
+        var user = authState.User;
+        bool existetoken = await loginService.existeToken();
+        if (user.Identity!.IsAuthenticated && existetoken)
+        {
+            navigationManager.NavigateTo("logout", true);
+        }
+    }
+    [JSInvokable]
+    public async Task cambiarModo()
+    {
+        modoDark = !modoDark;
+        if (modoDark)
+        {
+            _ = js.SetInLocalStorage("theme", "dark");
+        }
+        else
+        {
+            _ = js.SetInLocalStorage("theme", "ligth");
+        }
+    }
+
+    [JSInvokable]
+    public async Task cambiarModolight()
+    {
+        modoDark = false;
+        _ = js.SetInLocalStorage("theme", "ligth");
+    }
+
+    [JSInvokable]
+    public async Task cambiarModoDark()
+    {
+        modoDark = true;
+        _ = js.SetInLocalStorage("theme", "dark");
+
+    }
+
+    [JSInvokable]
+    public async Task asignarThema()
+    {
+        var modo = await js.GetFromLocalStorage("theme");
+        if (modo == "dark")
+        {
+            modoDark = true;
+        }
+        else
+        {
+            modoDark = false;
+        }
+    }
+}

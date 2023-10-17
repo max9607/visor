@@ -1,0 +1,121 @@
+﻿@inherits LayoutComponentBase
+
+@inject IJSRuntime js
+@inject NavigationManager navigationManager
+
+
+<PageTitle>PlantillaBZServerN7</PageTitle>
+
+
+        <div class="wrapper container-fluid theme-dark p-0 m-0">
+            <div id="content" class="@content"
+                <main>
+                    <article class="content px-2" style="margin-top: 45px">
+                        <TelerikRootComponent>
+                            @Body
+                        </TelerikRootComponent>
+                    </article>
+                </main>
+            </div>
+        </div>
+  
+
+
+@code {
+    public bool modoDark = true;
+    private string? classDark => modoDark ? "theme-dark" : null;
+    private string? themeBtn => modoDark ? "primary" : null;
+    private string? modolight => themeBtn != "primary" ? "primary" : null;
+    private string icon => modoDark ? "brightness-high" : "moon-fill";
+    private bool collapseNavMenu = false;
+
+
+
+    private bool? checkedV;
+    private string? sideBar => collapseNavMenu ? "active" : null;
+
+    private string? content => collapseNavMenu ? "active" : null;
+    private string? contenido => collapseNavMenu ? "full-width" : null;
+    private string? navBar => collapseNavMenu ? "full-width" : null;
+    private string? collapse => collapseNavMenu ? "in" : null;
+
+    [CascadingParameter]
+    public Task<AuthenticationState>? authenticationStateTask { get; set; }
+
+
+    public void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+        if (collapseNavMenu)
+            checkedV = true;
+        else
+            checkedV = false;
+
+    }
+    public void ToggleNavMenuContent()
+    {
+        if (collapseNavMenu)
+        {
+            checkedV = false;
+            collapseNavMenu = false;
+        }
+        this.StateHasChanged();
+    }
+
+    private void logout()
+    {
+        navigationManager.NavigateTo("Logout");
+    }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+
+
+        //await asignarThema();
+    }
+    [JSInvokable]
+    public async Task cambiarModo()
+    {
+        modoDark = !modoDark;
+        if (modoDark)
+        {
+            _ = js.SetInLocalStorage("theme", "dark");
+        }
+        else
+        {
+            _ = js.SetInLocalStorage("theme", "ligth");
+        }
+    }
+
+    [JSInvokable]
+    public async Task cambiarModolight()
+    {
+        modoDark = false;
+        _ = js.SetInLocalStorage("theme", "ligth");
+    }
+
+    [JSInvokable]
+    public async Task cambiarModoDark()
+    {
+        modoDark = true;
+        _ = js.SetInLocalStorage("theme", "dark");
+
+    }
+
+    [JSInvokable]
+    public async Task asignarThema()
+    {
+        var modo = await js.GetFromLocalStorage("theme");
+        if (modo == "dark")
+        {
+            modoDark = true;
+        }
+        else
+        {
+            modoDark = false;
+        }
+    }
+}

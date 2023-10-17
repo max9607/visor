@@ -1,0 +1,98 @@
+﻿@page "/pdfviewer"
+
+@inject UserJWT userJWT
+@using System.IO
+@using Telerik.Blazor.Components
+@using PLVISORTELERIK.Constants
+@using System.IO.Compression
+@using System.Text
+@using System.Net.Http
+@using System.Net.Http.Headers
+@using System.Threading.Tasks
+
+<TelerikPdfViewer @ref="@PdfViewerRef"
+                  Width="100%"
+                  Height="800px"
+                  Data="@FileData">
+</TelerikPdfViewer>
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Base64Pdf { get; set; }
+    public TelerikPdfViewer PdfViewerRef { get; set; }
+    public byte[] FileData { get; set; }
+
+    public string? Token { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //var fileBytes = Convert.FromBase64String(PdfViewerConstants.SampleFileBase64);
+        Token = await userJWT.GetToken();
+        await CargarPdfDesdeUrl();
+
+        await base.OnInitializedAsync();
+    }
+    private async Task CargarPdfDesdeUrl()
+    {
+        try
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserJWT.TOKENKEY);
+
+                using (var response = await httpClient.GetAsync(Base64Pdf))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        FileData = await response.Content.ReadAsByteArrayAsync();
+                    }
+                    else
+                    {
+                        // Manejar errores de respuesta HTTP
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Manejar otras excepciones
+        }
+    }
+
+    //private async Task CargarPdfDesdeUrl()
+    //{
+    //    try
+    //    {
+    //        var httpClient = new HttpClient();
+    //        var response = await httpClient.GetAsync(Base64Pdf);
+    //        var bytes = await response.Content.ReadAsByteArrayAsync();
+    //        FileData = bytes;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        // Manejo de errores
+    //    }
+    //}
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    var compressedBytes = CompressBase64Data(Base64Pdf);
+    //    FileData = compressedBytes;
+
+    //    await base.OnInitializedAsync();
+    //}
+
+    //private byte[] CompressBase64Data(string base64Data)
+    //{
+    //    byte[] bytes = Convert.FromBase64String(base64Data);
+
+    //    using (MemoryStream memoryStream = new MemoryStream())
+    //    {
+    //        using (DeflateStream deflateStream = new DeflateStream(memoryStream, CompressionLevel.Optimal))
+    //        {
+    //            deflateStream.Write(bytes, 0, bytes.Length);
+    //        }
+    //        return memoryStream.ToArray();
+    //    }
+    //}
+}

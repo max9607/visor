@@ -1,0 +1,117 @@
+﻿@inject NavigationManager navigationManager
+@inject IJSRuntime js
+<PageTitle>No autorizado</PageTitle>
+
+@if (mostrarMenaje)
+{
+    <h4>No estas autorizado para ver este contenido</h4>
+
+}
+
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationStateTask { get; set; }
+
+    private string mensaje = "";
+    private bool mostrarMenaje = false;
+
+
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = new Uri(navigationManager.Uri);
+        var queryString = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        var token = queryString.Get("token");
+
+
+        var authState = await authenticationStateTask!;
+
+
+        if (!authState.User.Identity!.IsAuthenticated)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                var urlReturn = navigationManager.Uri.ToString();
+                var urlbase = navigationManager.BaseUri.ToString();
+                if (urlReturn != urlbase)
+                    navigationManager.NavigateTo("Login?returnpage=" + urlReturn);
+                else
+                {
+                    navigationManager.NavigateTo("Login");
+                }
+
+            }
+            else
+            {
+                var urlReturn = navigationManager.Uri.ToString();
+                var urlbase = navigationManager.BaseUri.ToString();
+
+                //quitar la variable del querystring token de urlReturn
+
+                if (!authState.User.Identity!.IsAuthenticated)
+                {
+
+
+                    queryString.Remove("token");
+                    string newUri = "";
+
+                    if (queryString.Count > 0)
+                    {
+                        newUri = uri.GetLeftPart(UriPartial.Path) + "?" + queryString.ToString();
+                    }
+                    else
+                    {
+                        newUri = uri.GetLeftPart(UriPartial.Path);
+                    }
+
+
+                    if (newUri != urlbase)
+                    {
+                        newUri = System.Web.HttpUtility.UrlEncode(newUri);
+
+                        if (!string.IsNullOrEmpty(newUri))
+                        {
+                            await js.SetInLocalStorage("returnpage", newUri);
+                        }
+
+                    }
+                    else
+                    {
+                        await js.RemoveItem("returnpage");
+                    }
+
+                    navigationManager.NavigateTo("Login/auth?token=" + token);
+
+
+
+
+                }
+
+            }
+
+
+
+        }
+        else
+        {
+            mostrarMenaje = true;   
+        }
+
+       
+
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        
+
+       
+    }
+
+}

@@ -1,0 +1,189 @@
+﻿@inject NavigationManager navigationManager 
+
+
+
+@inject IJSRuntime js
+<ul class="list-unstyled components" >
+        <li class="nav-item">
+        <NavLink href="" Match="NavLinkMatch.All" >
+            <i class="bi bi-house"></i>
+                 Inicio
+            </NavLink>
+        </li>
+
+@*    <ListadoGenerico Listado="interfaces">
+        <HayRegistros Context="item">
+            <li class="nav-item">
+                <NavLink href="@item.Ubicacion">
+                    <i class="@item.Icono"></i> @item.Titulo
+                </NavLink>
+            </li>
+        </HayRegistros>
+    </ListadoGenerico>*@
+
+    @*<li class="nav-item">
+        <NavLink href="example">
+            <i class="bi bi-person-lines-fill"></i> Examples
+        </NavLink>
+    </li>
+
+    <li class="nav-item">
+        <NavLink href="dashboard">
+            <i class="bi bi-person-lines-fill"></i> Dashboard
+        </NavLink>
+    </li>*@
+@*
+    <li class="nav-item">
+        <NavLink href="perfil">
+            <i class="bi bi-person-lines-fill"></i> Perfil
+        </NavLink>
+    </li>
+
+    <li class="nav-item">
+        <NavLink href="downloadRule">
+            <i class="bi bi-journal-bookmark-fill"></i> Estatutos y Reglamentos
+        </NavLink>
+    </li>
+
+    <li class="nav-item">
+        <NavLink href="licences">
+            <i class="bi bi-file-medical-fill"></i> Solicitud de Licencia
+        </NavLink>
+    </li>
+
+    <li class="nav-item">
+        <NavLink href="listUtilSchool">
+            <i class="bi bi-list-task"></i> Lista de Utiles Escolares
+        </NavLink>
+    </li>
+
+    <li class="nav-item">
+        <NavLink href="classSchedule">
+            <i class="bi bi-alarm-fill"></i> Horiario de Clases
+        </NavLink>
+    </li>
+
+    <li class="nav-item">
+        <NavLink href="citations">
+            <i class="bi bi-send-check-fill"></i> Citaciones
+        </NavLink>
+    </li>
+
+    <li class="nav-item">
+        <NavLink href="curriculumPlanning">
+           <i class="bi bi-file-ruled-fill"></i> Planificación curricular
+        </NavLink>
+    </li>
+    <li class="nav-item">
+        <NavLink href="payments">
+            <i class="bi bi-file-ruled-fill"></i> Pagos
+        </NavLink>
+    </li>
+
+    <li class="nav-item">
+        <NavLink href="formpostulation/crear">
+            <i class="bi bi-file-ruled-fill"></i> Postulacion
+        </NavLink>
+    </li>
+    <li class="nav-item">
+        <NavLink href="ListPostulation">
+            <i class="bi bi-file-ruled-fill"></i> Lista de postulacion
+        </NavLink>
+    </li>
+    <li class="nav-item">
+        <NavLink href="familiares">
+            <i class="bi bi-file-ruled-fill"></i> Lista de Familiares
+        </NavLink>
+    </li>*@
+@*
+    <li class="nav-item">
+        <NavLink href="example">
+            <i class="bi bi-person-lines-fill"></i> Examples
+        </NavLink>
+    </li>*@
+@*    <li class="nav-item">
+        <NavLink href="formfamiliar/crear">
+            <i class="bi bi-file-ruled-fill"></i> Familiar
+        </NavLink>
+    </li>*@
+    <li class="nav-item">
+        <NavLink href="/Counter">
+            <i class="bi bi-file-ruled-fill"></i> Contador
+        </NavLink>
+    </li>
+    <li class="nav-item">
+        <NavLink href="/listaMaterias">
+            <i class="bi bi-file-ruled-fill"></i> lista Materias Inicial
+        </NavLink>
+    </li>
+    <li class="nav-item">
+        <NavLink href="/caclificacionesPrimaria">
+            <i class="bi bi-file-ruled-fill"></i> Calificaciones Primaria
+        </NavLink>
+    </li>
+    <li class="nav-item">
+        <NavLink href="/ListaMateriaPrimaria">
+            <i class="bi bi-file-ruled-fill"></i> lista Materias Primaria
+        </NavLink>
+    </li>
+    <li class="nav-item">
+        <NavLink href="/Reports">
+            <i class="bi bi-file-ruled-fill"></i> Reports
+        </NavLink>
+    </li>
+    @*    <li class="nav-item">
+              <NavLink  href="counter">
+                 <i class="fa-regular fa-address-card"></i> Counter
+            </NavLink>
+        </li>
+   
+        <li class="nav-item">
+        <NavLink href="example">
+                 <i class="bi bi-person-lines-fill"></i> Examples
+            </NavLink>
+        </li>
+         <li class="nav-item">
+              <NavLink  href="fetchdata">
+                 <i class="oi oi-list-rich"></i> fetchdata
+            </NavLink>
+        </li>
+        
+        <li>
+            <a href="#pageSubmenu" data-bs-toggle="collapse" aria-expanded="false">
+                <i class="fa-regular fa-address-card"></i>
+                Paginas
+                <i class="fa-solid fa-caret-down float-end"></i>
+            </a>
+            <ul class="collapse list-unstyled" id="pageSubmenu">
+                <li class="nav-item">
+                    <NavLink href="#">Home</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink  href="counter">Counter</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink  href="fetchdata">Fetch data</NavLink>
+                </li>
+            </ul>
+        </li>*@
+    </ul>       
+@code {
+    List<InterfaceDTO>? interfaces;
+
+    [Parameter]
+    public EventCallback CloseSideBar { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        //repositorio.AsignarUrlBase(Endpoint.auth);
+        //var resp = await repositorio.Get<List<InterfaceDTO>>("Accesos/Interfaces/32000");
+        //if (!resp.Error)
+        //{
+        //    interfaces = resp.Response;
+        //}
+        //else
+        //{
+        //    interfaces = null;
+        //}
+    }
+  
+}

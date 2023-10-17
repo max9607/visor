@@ -1,0 +1,108 @@
+﻿@page "/"
+@inject UserJWT userJWT
+@*<h3>VisorReport</h3>*@
+@using Telerik.ReportViewer.BlazorNative.Tools
+
+<PageTitle>Visor De Reportes</PageTitle>
+
+
+<style>
+
+
+    body {
+        background-color: dimgrey;
+    }
+
+    span:nth-of-type(1) {
+        width: 75%;
+        background: var(--fg-color);
+    }
+
+    .report-viewer-container {
+        width: 100%; /* Set container width to 100% */
+    }
+</style>
+
+<head>
+    <link href="https://kendo.cdn.telerik.com/2022.3.913/styles/kendo.common.min.css" rel="stylesheet" id="common-css" />
+    <link href="https://kendo.cdn.telerik.com/2022.3.913/styles/kendo.blueopal.min.css" rel="stylesheet" id="skin-css" />
+</head>
+<div class="report-viewer-container">
+<ReportViewer @ref="reportViewer1"
+              Height="850px"
+              ParametersAreaVisible ="false"
+              DocumentMapVisible="false"
+              @bind-ScaleMode="@ScaleMode"
+              @bind-ViewMode="@ViewMode"
+              @bind-Scale="@Scale"
+              PageMode="@PageMode.ContinuousScroll"
+              ServiceUrl="api/reports"
+              Tools="Tools"
+              ReportSource="@(new ReportSourceOptions
+                              {
+                                  Report = Reporte+".trdp",
+                                  Parameters = new Dictionary<string, object>
+                                  {
+                                            {"Parametros",Parametros},
+                                            {"Endpoint", Endpoint},
+                                            {"Token", Token}
+                                  }
+                              })">
+</ReportViewer>
+
+</div>
+@code {
+    ReportViewer? reportViewer1;
+
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Endpoint { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Reporte { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Parametros { get; set; }
+
+
+    public string? Token { get; set; }
+
+    public ViewMode Modo { get; set; } = ViewMode.Interactive;
+
+    public ScaleMode ScaleMode { get; set; } = ScaleMode.Specific;
+    public ViewMode ViewMode { get; set; } = ViewMode.PrintPreview;
+    public bool ParametersAreaVisible { get; set; }
+    public bool DocumentMapVisible { get; set; }
+    public double Scale { get; set; } = 1.0;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        Token = await userJWT.GetToken();
+    }
+    public List<IReportViewerTool> Tools = new List<IReportViewerTool>
+    {
+        new Refresh(),
+       // new NavigateBackward(),
+       // new NavigateForward(),
+       // new StopRendering(),
+        new FirstPage(),
+        new PreviousPage(),
+        //new PageNumber(),
+        new NextPage(),
+        new LastPage(),
+        new ToggleViewMode(),
+        new Export(),
+        new Print(),
+        //new ToggleDocumentMap(),
+        //new ToggleParametersArea()
+    };
+
+
+
+}
+
+

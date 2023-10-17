@@ -1,0 +1,73 @@
+﻿@page "/Reports"
+@*<h3>VisorReport</h3>*@
+
+
+
+<style>
+    
+
+    body{
+        background-color: dimgrey;
+
+    }
+ 
+</style>
+
+<head>
+    <link href="https://kendo.cdn.telerik.com/2022.3.913/styles/kendo.common.min.css" rel="stylesheet" id="common-css" />
+    <link href="https://kendo.cdn.telerik.com/2022.3.913/styles/kendo.blueopal.min.css" rel="stylesheet" id="skin-css" />
+</head>
+<ReportViewer @ref="reportViewer1"
+              Height="900px"
+              Width="100%"
+              @bind-ScaleMode="@ScaleMode"
+              @bind-ViewMode="@ViewMode"
+              @bind-Scale="@Scale"
+              PageMode="@PageMode.ContinuousScroll"
+              ServiceUrl="api/reports"
+              ReportSource="@(new ReportSourceOptions
+                              {
+                                  Report = Reporte+".trdp",
+                                  Parameters = new Dictionary<string, object>
+                                  {
+                                            {"Parametros",Parametros},
+                                            {"Endpoint", Endpoint},
+                                            {"Token", Token}
+                                           
+                                  }
+                              })">
+</ReportViewer>
+
+
+@code {
+    ReportViewer? reportViewer1;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Endpoint { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Reporte { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Parametros { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? Token { get; set; }
+
+    public ViewMode Modo { get; set; } = ViewMode.Interactive;
+    
+    public ScaleMode ScaleMode { get; set; } = ScaleMode.Specific;
+    public ViewMode ViewMode { get; set; } = ViewMode.PrintPreview;
+    public bool ParametersAreaVisible { get; set; }
+    public bool DocumentMapVisible { get; set; }
+    public double Scale { get; set; } = 1.0;
+
+
+
+
+
+}

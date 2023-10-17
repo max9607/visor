@@ -1,0 +1,77 @@
+
+:root {
+    --primary_0: 0, 97, 134;
+    --primary_50: 0, 92, 134;
+    --primary_100: 0, 88, 134;
+    --primary_200: 0, 84, 134;
+    --primary_300: 0, 80, 134;
+    --primary_400: 0, 75, 134;
+    --primary_500: 0, 70, 134;
+    --primary_600: 0, 65, 134;
+    --primary_800: 0, 60, 134;
+    --primary_700: 0, 55, 134;
+    --primary_900: 0, 50, 134;
+    --primary_1000: 0, 45, 134;
+    /**/
+    --secondary_0: 0, 185, 219;
+    --secondary_50: 0, 180, 219;
+    --secondary_100: 0, 175, 219;
+    --secondary_200: 0, 170, 219;
+    --secondary_300: 0, 165, 219;
+    --secondary_400: 0, 160, 219;
+    --secondary_500: 0, 155, 219;
+    --secondary_600: 0, 150, 219;
+    --secondary_700: 0, 145, 219;
+    --secondary_800: 0, 140, 219;
+    --secondary_900: 0, 135, 219;
+    --secondary_1000: 0, 130, 219;
+    /**/
+    /*--bg-color: #f5f5f5;*/
+    --bg-color: #f1f3f7;
+    --bg-sidebar-color: white;
+    --bg-color-1000: white;
+    --bg-color-hover: 203,203,203;
+    --fg-color: #333;
+    --fg-color-reverse: #333;
+
+    /**/
+    --filter: initial
+}
+
+.theme-dark {
+    --primary_0: 55, 113, 108;
+    --primary_50: 55, 108, 108;
+    --primary_100: 55, 103, 108;
+    --primary_200: 55, 98, 108;
+    --primary_300: 55, 93, 108;
+    --primary_400: 55, 88, 108;
+    --primary_500: 55, 83, 108;
+    --primary_600: 55, 78, 108;
+    --primary_800: 55, 73, 108;
+    --primary_700: 955, 68, 108;
+    --primary_900: 55, 63, 108;
+    --primary_1000: 55, 58, 108;
+    /**/
+    --secondary_0: 98, 164, 185;
+    --secondary_50: 98, 159, 185;
+    --secondary_100: 98, 154, 185;
+    --secondary_200: 98, 149, 185;
+    --secondary_300: 98, 144, 185;
+    --secondary_400: 98, 139, 185;
+    --secondary_500: 98, 134, 185;
+    --secondary_600: 98, 129, 185;
+    --secondary_800: 98, 124, 185;
+    --secondary_700: 98, 119, 185;
+    --secondary_900: 98, 114, 185;
+    --secondary_1000: 98, 109, 185;
+    /**/
+    --bg-color: #333;
+    --bg-sidebar-color: #1e1e1e;
+    --bg-color-hover: var(--primary_500);
+    --bg-color-1000: #424242;
+    --fg-color: #f5f5f5;
+    --fg-color-reverse: #f5f5f5;
+
+    /**/
+    --filter: invert(1) hue-rotate(180deg) contrast(2);
+}
